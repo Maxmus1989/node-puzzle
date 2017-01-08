@@ -6,12 +6,13 @@ module.exports = ->
   lines = 1
 
   transform = (chunk, encoding, cb) ->
-    tokens = chunk.split(' ')
+    lines = chunk.split(/\n/).length
+    tokens = chunk.trim().replace(/\n/g, ' ').replace(/("[^"]*")/g, 'quote').replace(/([A-Z])/g, ' $1').split(' ').filter((w) -> w.length)
     words = tokens.length
     return cb()
 
   flush = (cb) ->
-    this.push {words, lines}
+    this.push { words, lines }
     this.push null
     return cb()
 

@@ -21,7 +21,6 @@ helper = (input, expected, done) ->
 
 
 describe '10-word-count', ->
-
   it 'should count a single word', (done) ->
     input = 'test'
     expected = words: 1, lines: 1
@@ -37,6 +36,37 @@ describe '10-word-count', ->
     expected = words: 1, lines: 1
     helper input, expected, done
 
-  # !!!!!
-  # Make the above tests pass and add more tests!
-  # !!!!!
+  it 'should count 2 quoted characters as 2 words', (done) ->
+    input = '"this is one word!" "but now will become two words!"'
+    expected = words: 2, lines: 1
+    helper input, expected, done
+
+  it 'should count quoted camel cased characters as a single word', (done) ->
+    input = '"thisIsOneWord"'
+    expected = words: 1, lines: 1
+    helper input, expected, done
+
+  it 'should count 2 camel cased characters within a quote as a single word', (done) ->
+    input = '"thisIs OneWord"'
+    expected = words: 1, lines: 1
+    helper input, expected, done
+
+  it 'should count lines', (done) ->
+    input = 'result\nshould be\n3 lines with 8 words'
+    expected = words: 8, lines: 3
+    helper input, expected, done
+
+  it 'should count empty lines', (done) ->
+    input = 'result\n\n\nshould have 4 lines with 8 words'
+    expected = words: 8, lines: 4
+    helper input, expected, done
+
+  it 'should count words with multiple space in between as 2 words', (done) ->
+    input = 'two     words'
+    expected = words: 2, lines: 1
+    helper input, expected, done
+
+  it 'should count complex words in multiple lines correctly', (done) ->
+    input = 'this sentence \n shouldHave \n\n 5 " linesAnd 7" \nWords'
+    expected = words: 7, lines: 5
+    helper input, expected, done
